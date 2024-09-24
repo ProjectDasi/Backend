@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import potato.dasi.domain.Member;
 import potato.dasi.dto.VerificationRequest;
 import potato.dasi.persistence.MemberRepository;
@@ -22,7 +23,13 @@ public class VerifyService {
 		System.out.println(user.get());
 		if (user.isPresent()) {
 			String verificationCode = generateVerificationCode(); // 인증번호 생성
-			smsService.sendVerificationCode(user.get().getPhone(), verificationCode); // 인증번호 전송
+			
+			try {
+				// 인증번호 전송
+				smsService.sendVerificationCode(user.get().getPhone(), verificationCode);
+			} catch (CoolsmsException e) {
+				e.printStackTrace();
+			} 
 			
 			System.out.println(verificationCode);
 			// 인증번호 저장 (예: 메모리 캐시, DB 등)

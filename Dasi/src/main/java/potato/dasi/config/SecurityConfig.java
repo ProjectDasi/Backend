@@ -39,16 +39,18 @@ public class SecurityConfig {
 	SecurityFilterChain sercurityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(cf -> cf.disable()); // CSRF 보호 비활성화
 
-		http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+		 http.authorizeHttpRequests(auth->auth
+				 .requestMatchers("/profile/**").hasAnyRole("USER", "ADMIN")
+				 .anyRequest().permitAll());
 
-//		http.formLogin(form->form.disable());	// Form을 이용한 로그인 사용 X
+		http.formLogin(form->form.disable());	// Form을 이용한 로그인 사용 X
 
 		http.httpBasic(basic -> basic.disable()); // Http Basic 인증 방식 사용 X
 
 		// 세션을 유지하지 않겠다고 설정 -> url 호출 후 응답할때까지만 유지(응답 후 삭제)
 		http.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		
-		http.oauth2Login(oauth2->oauth2.successHandler(successHandler));
+//		http.oauth2Login(oauth2->oauth2.successHandler(successHandler));
 
 		// 스프링 시큐리티가 등록한 필터체인의 뒤에 작성한 필터 추가
 		http.addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), memberRepository));
