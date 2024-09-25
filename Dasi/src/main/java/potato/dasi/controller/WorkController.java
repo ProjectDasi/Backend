@@ -45,7 +45,7 @@ public class WorkController {
 	}
 	
 	@GetMapping("/work/recommend")
-	public ResponseEntity<?> getRecommand(@RequestParam String id) throws Exception{
+	public ResponseEntity<?> getRecommend(@RequestParam String id) throws Exception{
 		List<WorkRecommendDTO> recommend = workService.getRecommend(id);
 		
 		if(recommend == null)
