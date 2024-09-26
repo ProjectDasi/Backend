@@ -17,22 +17,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import potato.dasi.domain.Certification;
 import potato.dasi.domain.Education;
+import potato.dasi.domain.LearningProgram;
 import potato.dasi.domain.Member;
 import potato.dasi.domain.Preference;
 import potato.dasi.domain.Resume;
 import potato.dasi.domain.Training;
+import potato.dasi.domain.Work;
 import potato.dasi.domain.WorkExperience;
+import potato.dasi.dto.LearningDetailDTO;
 import potato.dasi.dto.PersonalEduRecommendDTO;
 import potato.dasi.dto.PersonalJobRecommendDTO;
 import potato.dasi.dto.PersonalRecommendDTO;
 import potato.dasi.dto.PersonalRecommendReqDTO;
+import potato.dasi.dto.WorkDetailDTO;
 import potato.dasi.persistence.CertificationRepository;
 import potato.dasi.persistence.EducationRepository;
+import potato.dasi.persistence.LearningProgramRepository;
 import potato.dasi.persistence.MemberRepository;
 import potato.dasi.persistence.PreferenceRepository;
 import potato.dasi.persistence.ResumeRepository;
 import potato.dasi.persistence.TrainingRepository;
 import potato.dasi.persistence.WorkExperienceRepository;
+import potato.dasi.persistence.WorkRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +51,8 @@ public class RecommendService {
 	private final TrainingRepository trainingRepository;
 	private final EducationRepository educationRepository;
 	private final PreferenceRepository preferenceRepository;
+	private final LearningProgramRepository learningProgramRepository;
+	private final WorkRepository workRepository;
 	private final ObjectMapper objectMapper;
 	private final RestTemplate restTemplate;
 
@@ -107,11 +115,13 @@ public class RecommendService {
 		StringBuilder preferStr = new StringBuilder();
 		System.out.println(preferList);
 		if (!preferList.isEmpty()) {
-			for (Preference prefer : preferList) {
-				preferStr.append(prefer.getPreferenceType().getType());
-				preferStr.append(", ");
-			}
-			preferStr.setLength(preferStr.length() - 2);
+//			for (Preference prefer : preferList) {
+//				preferStr.append(prefer.getPreferenceType().getType());
+//				preferStr.append(", ");
+//			}
+//			preferStr.setLength(preferStr.length() - 2);
+			preferStr.append(preferList.get(0).getPreferenceType().getType());
+			
 		}
 
 		PersonalRecommendReqDTO req = PersonalRecommendReqDTO.builder().address(resume.getAddress())
@@ -132,7 +142,7 @@ public class RecommendService {
 		HttpEntity<String> requestEntity = new HttpEntity<>(jsonPayload, headers);
 
 		// POST 요청 보내기
-		ResponseEntity<String> response = restTemplate.exchange("http://172.29.17.157:5000/recommend", HttpMethod.POST,
+		ResponseEntity<String> response = restTemplate.exchange("http://192.168.0.139:5000/recommend", HttpMethod.POST,
 				requestEntity, String.class);
 
 		// 응답확인
@@ -147,6 +157,17 @@ public class RecommendService {
 		List<PersonalEduRecommendDTO> recommendEduList = objectMapper.readValue(itemsNodeEdu.toString(), new TypeReference<List<PersonalEduRecommendDTO>>() {});
 		List<PersonalJobRecommendDTO> recommendJobList = objectMapper.readValue(itemsNodeJob.toString(), new TypeReference<List<PersonalJobRecommendDTO>>() {});
 		
+		for(PersonalEduRecommendDTO edu : recommendEduList) {
+			LearningProgram learning = learningProgramRepository.findById((long) edu.getId()).orElse(null);
+			LearningDetailDTO dto = LearningDetailDTO.convertToDTO(learning);
+			edu.setDetail(dto);
+		}
+		
+		for(PersonalJobRecommendDTO job : recommendJobList) {
+			Work work = workRepository.findById((long) job.getId()).orElse(null);
+			WorkDetailDTO dto = WorkDetailDTO.convertToDTO(work);
+			job.setDetail(dto);
+		}
 		// PersonalRecommendDTO 객체 생성
 		PersonalRecommendDTO personalRecommendDTO = PersonalRecommendDTO.builder()
 											    .educationRecommend(recommendEduList)  // 교육 추천 리스트 할당

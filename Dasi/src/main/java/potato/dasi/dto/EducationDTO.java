@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonalJobRecommendDTO {
-	private int id;
-	private double similarity;
-	private String tag;
-	private WorkDetailDTO detail;
+public class EducationDTO {
+	private String educationStart;
+	private String educationEnd;
+	private String school;
+	private String major;
 }
-
