@@ -40,7 +40,7 @@ public class SecurityConfig {
 		http.csrf(cf -> cf.disable()); // CSRF 보호 비활성화
 
 		 http.authorizeHttpRequests(auth->auth
-				 .requestMatchers("/profile/**").hasAnyRole("USER", "ADMIN")
+				 .requestMatchers("/profile/**").hasAnyRole("MEMBER", "ADMIN")
 				 .anyRequest().permitAll());
 
 		http.formLogin(form->form.disable());	// Form을 이용한 로그인 사용 X

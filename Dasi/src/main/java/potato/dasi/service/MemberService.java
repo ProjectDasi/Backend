@@ -130,6 +130,16 @@ public class MemberService {
 		
 		FindInfoDTO result = FindInfoDTO.convertToDTO(member);
 		return result;
+	}
+
+	public boolean changePassword(String loginId, String newPassword) {
+		Member member = memberRepository.findByLoginId(loginId).orElse(null);
+		
+		if(member == null)
+			return false;
+		
+		member.setPassword(passwordEncoder.encode(newPassword));
+		return true;
 	}	
 
 }

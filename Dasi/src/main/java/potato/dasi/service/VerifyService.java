@@ -24,12 +24,12 @@ public class VerifyService {
 		if (user.isPresent()) {
 			String verificationCode = generateVerificationCode(); // 인증번호 생성
 			
-			try {
-				// 인증번호 전송
-				smsService.sendVerificationCode(user.get().getPhone(), verificationCode);
-			} catch (CoolsmsException e) {
-				e.printStackTrace();
-			} 
+//			try {
+//				// 인증번호 전송
+//				smsService.sendVerificationCode(user.get().getPhone(), verificationCode);
+//			} catch (CoolsmsException e) {
+//				e.printStackTrace();
+//			} 
 			
 			System.out.println(verificationCode);
 			// 인증번호 저장 (예: 메모리 캐시, DB 등)
