@@ -133,6 +133,7 @@ public class RecommendService {
 
 		// JSON 문자열로 변환
 		String jsonPayload = objectMapper.writeValueAsString(req);
+		System.out.println(jsonPayload);
 
 		// HTTP 헤더 설정
 		HttpHeaders headers = new HttpHeaders();
