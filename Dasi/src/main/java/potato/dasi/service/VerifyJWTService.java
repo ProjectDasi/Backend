@@ -33,17 +33,20 @@ public class VerifyJWTService {
 
 	public String getClaim(String token) {
 		String tok = getJWTSource(token);
+		System.out.println("Token to be verified: " + tok); // 디버깅용 로그
 		// 토큰에 담긴 정보 중 key가 “loginId”인 데이터 가져오기
 		return JWT.require(Algorithm.HMAC256(JWT_KEY)).build().verify(tok).getClaim(claimName).asString();
 	}
 	
 	public boolean isTokenValid(String token) {
+		System.out.println("Test to be verified: " + token); // 디버깅용 로그
 		if (token == null || token.isEmpty()) {
 			System.out.println("토큰에");
 		    return false; // Or throw an exception
 		}
 		
 		String tok = getJWTSource(token);
-		return JWT.require(Algorithm.HMAC256(JWT_KEY)).build().verify(tok).getExpiresAt().before(new Date());
+		System.out.println("Token to be verified: " + tok); // 디버깅용 로그
+		return JWT.require(Algorithm.HMAC256(JWT_KEY)).build().verify(tok).getExpiresAt().after(new Date());
 	}
 }

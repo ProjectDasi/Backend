@@ -31,6 +31,12 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		if (request.getRequestURI().startsWith("/find/password")) {
+		    filterChain.doFilter(request, response);
+		    return;
+		}
+
+		
 		String srcToken = request.getHeader("Authorization");			// 요청 헤더에서 Authorization을 얻어옴
 
 		if(srcToken == null || !srcToken.startsWith("Bearer ")) {		// 없거나 "Bearer "로 시작하지 않으면

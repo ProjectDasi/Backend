@@ -139,6 +139,7 @@ public class MemberService {
 			return false;
 		
 		member.setPassword(passwordEncoder.encode(newPassword));
+		memberRepository.save(member);
 		return true;
 	}	
 
