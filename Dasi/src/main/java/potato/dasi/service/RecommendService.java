@@ -143,7 +143,7 @@ public class RecommendService {
 		HttpEntity<String> requestEntity = new HttpEntity<>(jsonPayload, headers);
 
 		// POST 요청 보내기
-		ResponseEntity<String> response = restTemplate.exchange("http://192.168.0.139:5000/recommend", HttpMethod.POST,
+		ResponseEntity<String> response = restTemplate.exchange("http://172.21.37.241:5000/recommend", HttpMethod.POST,
 				requestEntity, String.class);
 
 		// 응답확인

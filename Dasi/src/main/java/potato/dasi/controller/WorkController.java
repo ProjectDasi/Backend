@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,9 +22,11 @@ import potato.dasi.service.WorkService;
 public class WorkController {
 	private final WorkService workService;
 	
+//	@CrossOrigin(origins = "http://192.168.0.23:3000")
 	@GetMapping("/work/list")
 	public ResponseEntity<?> getWorkListPaging(@RequestParam(defaultValue = "0") int page, 
 									@RequestParam(defaultValue = "10") int size){
+		System.out.println("일자리 요청");
 		Pageable pageable = PageRequest.of(page, size);
 		
 		Page<WorkListDTO> workList = workService.getWorkListPaging(pageable);
