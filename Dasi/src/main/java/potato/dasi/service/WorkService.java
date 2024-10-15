@@ -103,7 +103,7 @@ public class WorkService {
 		HttpEntity<String> requestEntity = new HttpEntity<>(jsonPayload, headers);
 		
 		// POST 요청 보내기
-		ResponseEntity<String> response = restTemplate.exchange("http://localhost:5000/get_job_id",
+		ResponseEntity<String> response = restTemplate.exchange("http://172.21.25.60:5000/get_job_id",
 				HttpMethod.POST, requestEntity, String.class);
 		
 		// 응답확인
