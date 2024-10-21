@@ -17,7 +17,7 @@ public class WorkDetailDTO {
 	private String workCategory;
 	private String salary;
 	private String regionName;
-	private Date signupDate;
+	private String signupDate;
 	private String dueDate;	// Date type으로 변경 예정
 	private String career;	
 	private String education;
@@ -30,22 +30,32 @@ public class WorkDetailDTO {
 	
 	public static WorkDetailDTO convertToDTO(Work work) {
 		String dueDate = DataConverter.convertDate(work.getDueDate());
+		String signupDate = DataConverter.convertDate(work.getSignupDate());
+		String workType = DataConverter.convertToOther(work.getWorkType(), null);
+		String workHours = DataConverter.convertToOther(work.getWorkHours(), null);
+		String workCategory = DataConverter.convertToOther(work.getWorkCategory(), "-");
+		String certification = DataConverter.convertToOther(work.getCertification(), "-");
+		String salary = DataConverter.convertToOther(work.getSalary(), "협의");
+		String career = DataConverter.convertToOther(work.getCareer(), "무관");
+		String education = DataConverter.convertToOther(work.getEducation(), "무관");
+		String email = DataConverter.convertToOther(work.getEmail(), "-");
+		String contact = DataConverter.containsPhoneNumber(work.getContact()) ? work.getContact() : "-";
 		
 		WorkDetailDTO dto = WorkDetailDTO.builder()
 				.company(work.getCompany())
 				.title(work.getTitle())
-				.workHours(work.getWorkHours())
-				.workType(work.getWorkType())
-				.workCategory(work.getWorkCategory())
-				.salary(work.getSalary())
+				.workHours(workHours)
+				.workType(workType)
+				.workCategory(workCategory)
+				.salary(salary)
 				.regionName(work.getRegionName())
-				.signupDate(work.getSignupDate())
+				.signupDate(signupDate)
 				.dueDate(dueDate)
-				.career(work.getCareer())
-				.education(work.getEducation())
-				.certification(work.getCertification())
-				.contact(work.getContact())
-				.email(work.getEmail())
+				.career(career)
+				.education(education)
+				.certification(certification)
+				.contact(contact)
+				.email(email)
 				.details(work.getDetails())
 				.link(work.getLink())
 				.build();

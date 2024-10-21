@@ -49,8 +49,8 @@ public class Resume {
 	private String address;
 	private String phone;	// 전화번호 형식 지정?
 	private String email;	// 이메일 형식 지정?
-	private String emergency_contact;
-	private String emergency_relationship;
+	private String emergencyContact;
+	private String emergencyRelationship;
 	
 	@OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Education> educationList;

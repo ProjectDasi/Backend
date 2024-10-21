@@ -17,12 +17,13 @@ public class WorkListDTO {
 	
 	public static WorkListDTO convertToDTO(Work work) {
 		String dueDate = DataConverter.convertDate(work.getDueDate());
+		String salary = DataConverter.convertToOther(work.getSalary(), "협의");
 		
 		WorkListDTO dto = WorkListDTO.builder()
 				.id(work.getId())
 				.title(work.getTitle())
 				.regionName(work.getRegionName())
-				.salary(work.getSalary())
+				.salary(salary)
 				.dueDate(dueDate)
 				.build();
 		

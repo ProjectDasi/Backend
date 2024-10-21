@@ -2,6 +2,8 @@ package potato.dasi.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DataConverter {
     public static String convertDate(Date date) {
@@ -43,5 +45,23 @@ public class DataConverter {
 
         // 다른 경우는 그대로 반환
         return phoneNumber;
+    }
+    
+    // 정규식 패턴 설정
+    private static final String PHONE_NUMBER_PATTERN = 
+            "\\b(01[016789]-\\d{3,4}-\\d{4})\\b|\\b(\\d{2,3}-\\d{3,4}-\\d{4})\\b";
+
+    public static boolean containsPhoneNumber(String input) {
+        Pattern pattern = Pattern.compile(PHONE_NUMBER_PATTERN);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
+    
+    public static String convertToOther(String workInfo, String replaceWord) {
+    	if(workInfo == null || workInfo.isEmpty() || workInfo.equals("None")) {
+    		return replaceWord;
+    	}
+   
+    	return workInfo;
     }
 }

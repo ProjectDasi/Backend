@@ -42,10 +42,10 @@ public class WorkService {
 	private final RegionRepository regionRepository;
 	
 	public Page<WorkListDTO> getWorkListPaging(Pageable pageable) {
-		Pageable sortByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-				Sort.by("id").descending());
+		Pageable sortBySignUpDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+				Sort.by("signupDate").descending());
 		
-		Page<Work> workListPage = workRepository.findAll(sortByIdDesc);
+		Page<Work> workListPage = workRepository.findAll(sortBySignUpDesc);
 		
 //		int totalElements = (int) workListPage.getTotalElements();
 //      AtomicInteger start = new AtomicInteger(totalElements - (int) sortByIdDesc.getOffset());
