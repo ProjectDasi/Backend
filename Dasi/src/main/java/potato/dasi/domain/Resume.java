@@ -3,6 +3,8 @@ package potato.dasi.domain;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,6 +43,7 @@ public class Resume {
 	private Date birthDate;
 	
 	@Temporal(value = TemporalType.TIMESTAMP)
+	@UpdateTimestamp
 	private Date updateDate;
 	
 	// @Column(nullable=false)처리?

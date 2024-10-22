@@ -41,9 +41,9 @@ public class Training {
 	@Temporal(value = TemporalType.DATE)
 	private Date trainingEnd;
 	
-	@Column(nullable = false)
+//	@Column(nullable = false)
 	private String trainingName;
 
-	@Column(nullable = false)
+//	@Column(nullable = false)
 	private String trainingInstitution;
 }

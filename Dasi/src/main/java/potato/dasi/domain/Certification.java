@@ -38,9 +38,9 @@ public class Certification {
 	@Temporal(value = TemporalType.DATE)
 	private Date acquisitionDate;		// 취득 날짜
 
-	@Column(nullable = false)
+//	@Column(nullable = false)
 	private String certificationName;	// 자격 이름
 	
-	@Column(nullable = false)
+//	@Column(nullable = false)
 	private String issuingAuthority;	// 자격 증명소
 }

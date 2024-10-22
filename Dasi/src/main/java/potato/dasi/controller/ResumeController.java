@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import potato.dasi.dto.ResumeDTO;
 import potato.dasi.service.ResumeService;
 
 @RestController
@@ -16,26 +17,24 @@ import potato.dasi.service.ResumeService;
 public class ResumeController {
 	private final ResumeService resumeService;
 	
-//	@PostMapping("/scan/resume/{id}")
-//	private ResponseEntity<?> scanResume(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) throws Exception{
-//		return ResponseEntity.ok(resumeService.scanResume(id, file));
-//	}
 	@PostMapping("/scan/resume/{id}")
-	private ResponseEntity<?> scanResume(@PathVariable("id") Long id, @RequestBody String resumeData) throws Exception{
-		return ResponseEntity.ok(resumeService.scanResume(id, resumeData));
+	private ResponseEntity<?> scanResume(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) throws Exception{
+		ResumeDTO result = resumeService.scanResume(id, file);
+		
+		if(result == null)
+			return ResponseEntity.badRequest().body("이력서 등록에 실패했습니다");
+		else
+			return ResponseEntity.ok(result);
 	}
 	
-	
-//	@PostMapping("/scan/resume/{id}")
-//	private ResponseEntity<?> scanResume(@RequestBody ResumeReqDTO resume){
-//		ResumeReqDTO result = resumeService.scanResume(resume);
-//		
-//		if(result == null)
-//			return ResponseEntity.badRequest().body("이력서를 스캔할 수 없습니다.");
-//		else
-//			return ResponseEntity.ok(result);
-//	}
-	
-	
+	@PostMapping("/update/resume/{id}")
+	private ResponseEntity<?> scanResume(@PathVariable("id") Long id, @RequestBody ResumeDTO resume) throws Exception{
+		ResumeDTO result = resumeService.updateResume(id, resume);
+		
+		if(result == null)
+			return ResponseEntity.badRequest().body("이력서 등록에 실패했습니다");
+		else
+			return ResponseEntity.ok(result);
+	}
 	
 }

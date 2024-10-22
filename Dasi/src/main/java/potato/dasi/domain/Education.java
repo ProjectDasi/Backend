@@ -41,10 +41,10 @@ public class Education {
 	@Temporal(value = TemporalType.DATE)
 	private Date educationEnd;
 	
-	@Column(nullable = false)
+//	@Column(nullable = false)
 	private String school;
 	
-	@Column(nullable = false)
+//	@Column(nullable = false)
 	private String major;
 	
 }

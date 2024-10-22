@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 
 public class DataConverter {
     public static String convertDate(Date date) {
+    	if(date == null)
+    		return null;
+    	
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = dateFormat.format(date);
 
@@ -17,6 +20,21 @@ public class DataConverter {
                 return "채용시까지";
             default:
                 return dateString; // 시간이 없는 날짜 문자열로 반환
+        }
+    }
+    
+    public static Date convertStringToDate(String dateString) {
+    	if (dateString == null || dateString.trim().isEmpty()) {
+            return null; // 빈 문자열이나 null인 경우 null 반환
+        }
+    	
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // 날짜 형식 지정
+        try {
+            // 문자열을 Date로 변환
+            return formatter.parse(dateString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // 변환 실패 시 null 반환
         }
     }
     
