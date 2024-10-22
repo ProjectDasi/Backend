@@ -25,12 +25,12 @@ public class ResumeDTO {
 	private String birthDate;
 	private String updateDate;
 	
-	private List<WorkExperienceDTO> workExperience;
-	private List<EducationDTO> education;
-	private List<CertificationDTO> certification;
-	private List<TrainingDTO> training;
+//	private List<WorkExperienceDTO> workExperience;
+//	private List<EducationDTO> education;
+//	private List<CertificationDTO> certification;
+//	private List<TrainingDTO> training;
 	
-	public static ResumeDTO converToDTO(Resume resume) {
+	public static ResumeDTO convertToDTO(Resume resume) {
 		String birth = DataConverter.convertDate(resume.getBirthDate());
 		String update = DataConverter.convertDate(resume.getUpdateDate());
 		
@@ -45,10 +45,6 @@ public class ResumeDTO {
 				.emergencyRelationship(resume.getEmergencyRelationship())
 				.birthDate(birth)
 				.updateDate(update)
-				.workExperience(WorkExperienceDTO.converToDTO(resume.getWorkExperienceList()))
-				.education(EducationDTO.converToDTO(resume.getEducationList()))
-				.certification(CertificationDTO.converToDTO(resume.getCertificationList()))
-				.training(TrainingDTO.converToDTO(resume.getTrainingList()))
 				.build();
 		
 		return dto;

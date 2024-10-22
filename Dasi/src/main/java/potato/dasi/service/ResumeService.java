@@ -34,6 +34,7 @@ import potato.dasi.domain.WorkExperience;
 import potato.dasi.dto.CertificationDTO;
 import potato.dasi.dto.EducationDTO;
 import potato.dasi.dto.ResumeDTO;
+import potato.dasi.dto.ResumeReqDTO;
 import potato.dasi.dto.TrainingDTO;
 import potato.dasi.dto.WorkExperienceDTO;
 import potato.dasi.persistence.CertificationRepository;
@@ -57,7 +58,7 @@ public class ResumeService {
 	private final PreferenceRepository preferenceRepository;
 	private final RestTemplate restTemplate;
 
-	public ResumeDTO scanResume(Long id, MultipartFile file) throws Exception {
+	public ResumeReqDTO scanResume(Long id, MultipartFile file) throws Exception {
 		// 파일이 비어 있는지 확인
 		if (file.isEmpty()) {
 			return null;
@@ -165,7 +166,7 @@ public class ResumeService {
 		resume = resumeRepository.save(resume);
 		System.out.println(resume);
 		
-		ResumeDTO resumeDTO = ResumeDTO.converToDTO(resume);
+		ResumeReqDTO resumeDTO = ResumeReqDTO.convertToDTO(resume);
 		// 응답 본문 반환
 		return resumeDTO;
 	}
@@ -177,9 +178,9 @@ public class ResumeService {
 		}
 	}
 
-	public ResumeDTO updateResume(Long id, ResumeDTO resumeDTO) {
+	public ResumeReqDTO updateResume(Long id, ResumeReqDTO resumeDTO) {
 	    // 1. 기존 Resume 엔티티 조회
-	    Resume resume = resumeRepository.findById(resumeDTO.getId()).orElseThrow(() -> new RuntimeException("Resume not found"));
+	    Resume resume = resumeRepository.findById(resumeDTO.getResume().getId()).orElseThrow(() -> new RuntimeException("Resume not found"));
 	    
 	    // 2. WorkExperience 리스트 업데이트 (삭제 로직 포함)
 	    List<WorkExperience> updatedWorkExperienceList = processWorkExperienceList(resume, resumeDTO.getWorkExperience());
@@ -194,15 +195,15 @@ public class ResumeService {
 	    List<Training> updatedTrainingList = processTrainingList(resume, resumeDTO.getTraining());
 
 	    // 6. 업데이트된 리스트를 Resume에 설정
-	    resume.setPhoto(resumeDTO.getPhoto());
-	    resume.setName(resumeDTO.getName());
-	    resume.setAddress(resumeDTO.getAddress());
-	    resume.setPhone(resumeDTO.getPhone());
-	    resume.setEmail(resumeDTO.getEmail());
-	    resume.setEmergencyContact(resumeDTO.getEmergencyContact());
-	    resume.setEmergencyRelationship(resumeDTO.getEmergencyRelationship());
-	    resume.setBirthDate(DataConverter.convertStringToDate(resumeDTO.getBirthDate())); // String을 Date로 변환
-	    resume.setUpdateDate(DataConverter.convertStringToDate(resumeDTO.getUpdateDate())); // String을 Date로 변환
+	    resume.setPhoto(resumeDTO.getResume().getPhoto());
+	    resume.setName(resumeDTO.getResume().getName());
+	    resume.setAddress(resumeDTO.getResume().getAddress());
+	    resume.setPhone(resumeDTO.getResume().getPhone());
+	    resume.setEmail(resumeDTO.getResume().getEmail());
+	    resume.setEmergencyContact(resumeDTO.getResume().getEmergencyContact());
+	    resume.setEmergencyRelationship(resumeDTO.getResume().getEmergencyRelationship());
+	    resume.setBirthDate(DataConverter.convertStringToDate(resumeDTO.getResume().getBirthDate())); // String을 Date로 변환
+	    resume.setUpdateDate(DataConverter.convertStringToDate(resumeDTO.getResume().getUpdateDate())); // String을 Date로 변환
 	    resume.setWorkExperienceList(updatedWorkExperienceList);
 	    resume.setEducationList(updatedEducationList);
 	    resume.setCertificationList(updatedCertificationList);
@@ -211,7 +212,7 @@ public class ResumeService {
 	    // 7. Resume 저장 (cascade로 인해 관련 엔티티도 자동 저장됨)
 	    Resume result = resumeRepository.save(resume);
 
-	    return ResumeDTO.converToDTO(result); // 저장된 후 Resume 엔티티를 DTO로 변환 후 반환 (필요시)
+	    return ResumeReqDTO.convertToDTO(result); // 저장된 후 Resume 엔티티를 DTO로 변환 후 반환 (필요시)
 	}
 
 	// WorkExperience 리스트 처리 메서드 (삭제 로직 포함)
@@ -302,7 +303,7 @@ public class ResumeService {
 	        education.setEducationStart(DataConverter.convertStringToDate(dto.getEducationStart()));
 	        education.setEducationEnd(DataConverter.convertStringToDate(dto.getEducationEnd()));
 	        education.setMajor(dto.getMajor());
-	        education.setSchool(dto.getSchool());
+	        education.setSchool(dto.getSchoolName());
 	        education.setResume(resume); // 연관 설정
 
 	        updatedList.add(education);

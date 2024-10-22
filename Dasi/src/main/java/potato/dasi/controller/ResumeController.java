@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import potato.dasi.dto.ResumeDTO;
+import potato.dasi.dto.ResumeReqDTO;
 import potato.dasi.service.ResumeService;
 
 @RestController
@@ -19,7 +20,7 @@ public class ResumeController {
 	
 	@PostMapping("/scan/resume/{id}")
 	private ResponseEntity<?> scanResume(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) throws Exception{
-		ResumeDTO result = resumeService.scanResume(id, file);
+		ResumeReqDTO result = resumeService.scanResume(id, file);
 		
 		if(result == null)
 			return ResponseEntity.badRequest().body("이력서 등록에 실패했습니다");
@@ -28,8 +29,8 @@ public class ResumeController {
 	}
 	
 	@PostMapping("/update/resume/{id}")
-	private ResponseEntity<?> scanResume(@PathVariable("id") Long id, @RequestBody ResumeDTO resume) throws Exception{
-		ResumeDTO result = resumeService.updateResume(id, resume);
+	private ResponseEntity<?> scanResume(@PathVariable("id") Long id, @RequestBody ResumeReqDTO resume) throws Exception{
+		ResumeReqDTO result = resumeService.updateResume(id, resume);
 		
 		if(result == null)
 			return ResponseEntity.badRequest().body("이력서 등록에 실패했습니다");

@@ -19,10 +19,10 @@ public class EducationDTO {
 	private Long id;
 	private String educationStart;
 	private String educationEnd;
-	private String school;
+	private String schoolName;
 	private String major;
 	
-	public static List<EducationDTO> converToDTO(List<Education> eduList) {
+	public static List<EducationDTO> convertToDTO(List<Education> eduList) {
 		if (eduList == null || eduList.isEmpty()) {
 	        return Collections.emptyList(); // 빈 리스트 반환
 	    }
@@ -36,7 +36,7 @@ public class EducationDTO {
 	        		.id(edu.getId())
 	                .educationStart(start)
 	                .educationEnd(end)
-	                .school(edu.getSchool())
+	                .schoolName(edu.getSchool())
 	                .major(edu.getMajor())
 	                .build();
 	    }).collect(Collectors.toList());

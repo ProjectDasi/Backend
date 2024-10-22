@@ -22,7 +22,7 @@ public class WorkExperienceDTO {
 	private String company;
 	private String workDescription;
 	
-	public static List<WorkExperienceDTO> converToDTO(List<WorkExperience> workExpList) {
+	public static List<WorkExperienceDTO> convertToDTO(List<WorkExperience> workExpList) {
 		if (workExpList == null || workExpList.isEmpty()) {
 	        return Collections.emptyList(); // 빈 리스트 반환
 	    }

@@ -21,7 +21,7 @@ public class CertificationDTO {
 	private String certificationName;	// 자격 이름
 	private String issuingAuthority;
 	
-	public static List<CertificationDTO> converToDTO(List<Certification> certList) {
+	public static List<CertificationDTO> convertToDTO(List<Certification> certList) {
 		if (certList == null || certList.isEmpty()) {
 	        return Collections.emptyList(); // 빈 리스트 반환
 	    }

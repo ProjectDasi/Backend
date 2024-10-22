@@ -22,7 +22,7 @@ public class TrainingDTO {
 	private String trainingName;
 	private String trainingInstitution;
 	
-	public static List<TrainingDTO> converToDTO(List<Training> trainList) {
+	public static List<TrainingDTO> convertToDTO(List<Training> trainList) {
 		if (trainList == null || trainList.isEmpty()) {
 	        return Collections.emptyList(); // 빈 리스트 반환
 	    }
