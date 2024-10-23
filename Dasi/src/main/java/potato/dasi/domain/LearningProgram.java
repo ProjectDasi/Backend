@@ -52,6 +52,7 @@ public class LearningProgram {
 	private String support;
 	private String viewDetailsLink;
 	private String preferenceType;
+	private Long views;
 	
 	@ManyToOne
 	@JoinColumn(name = "preference_id")

@@ -13,13 +13,28 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
 	
 	@Query("SELECT w FROM Work w WHERE " +
 		       "(:regionId IS NULL OR w.region.id = :regionId) AND " +
-//				"(COALESCE(:regionId, w.region.id) = w.region.id) AND " +
+		       "(COALESCE(:qualification, false) = false OR w.preferredQualifications IS NOT NULL) AND " +
 		       "(:searchKeyword IS NULL OR " +
 		       "(w.title LIKE %:searchKeyword% OR " +
 		       "w.workCategory LIKE %:searchKeyword% OR " +
 		       "w.details LIKE %:searchKeyword%))")
 		Page<Work> searchWorks(@Param("regionId") Long regionId,
 		                       @Param("searchKeyword") String searchKeyword,
+		                       @Param("qualification") boolean qualification,
 		                       Pageable pageable);
+
+//	@Query("SELECT w FROM Work w WHERE " +
+//			"(:regionId IS NULL OR w.region.id = :regionId) AND " +
+////				"(COALESCE(:regionId, w.region.id) = w.region.id) AND " +
+//"(:searchKeyword IS NULL OR " +
+//"(w.title LIKE %:searchKeyword% OR " +
+//"w.workCategory LIKE %:searchKeyword% OR " +
+//			"w.details LIKE %:searchKeyword%))")
+//	Page<Work> searchWorks(@Param("regionId") Long regionId,
+//			@Param("searchKeyword") String searchKeyword,
+//			Pageable pageable);
+	
+	
+	Page<Work> findByPreferredQualificationsIsNotNull(Pageable pageable);
 
 }

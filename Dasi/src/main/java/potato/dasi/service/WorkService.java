@@ -129,7 +129,7 @@ public class WorkService {
 				.collect(Collectors.toList());
 	}
 
-	public Page<WorkListDTO> searchWorkList(Pageable pageable, String subRegion, String keyword) {
+	public Page<WorkListDTO> searchWorkList(Pageable pageable, String subRegion, String keyword, boolean qualification) {
 		Region region = regionRepository.findBySubregion(subRegion).orElse(null);
 		Long regionId = null;
 		
@@ -141,7 +141,32 @@ public class WorkService {
 		
 		Pageable sortedByCreatedDateDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
 				Sort.by("id").descending());
-		Page<Work> workListPage = workRepository.searchWorks(regionId, keyword, sortedByCreatedDateDesc);
+		Page<Work> workListPage = workRepository.searchWorks(regionId, keyword, qualification, sortedByCreatedDateDesc);
+
+		return workListPage.map(work -> WorkListDTO.convertToDTO(work));
+	}
+	
+//	public Page<WorkListDTO> searchWorkList(Pageable pageable, String subRegion, String keyword) {
+//		Region region = regionRepository.findBySubregion(subRegion).orElse(null);
+//		Long regionId = null;
+//		
+//		if(region == null || region.getId().equals(1L))
+//			regionId = null;
+//		else
+//			regionId = region.getId();
+//		
+//		
+//		Pageable sortedByCreatedDateDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+//				Sort.by("id").descending());
+//		Page<Work> workListPage = workRepository.searchWorks(regionId, keyword, sortedByCreatedDateDesc);
+//		
+//		return workListPage.map(work -> WorkListDTO.convertToDTO(work));
+//	}
+
+	public Page<WorkListDTO> searchQualificationWorkList(Pageable pageable) {
+		Pageable sortedByCreatedDateDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+				Sort.by("id").descending());
+		Page<Work> workListPage = workRepository.findByPreferredQualificationsIsNotNull(sortedByCreatedDateDesc);
 
 		return workListPage.map(work -> WorkListDTO.convertToDTO(work));
 	}

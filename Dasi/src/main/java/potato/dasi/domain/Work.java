@@ -57,6 +57,8 @@ public class Work {
 	private String email;
 	private String certification;
 	private String preferenceType;
+	private Long views;
+	private String preferredQualifications;
 	
 	@ManyToOne
 	@JoinColumn(name = "preference_id")

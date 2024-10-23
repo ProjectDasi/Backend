@@ -70,6 +70,8 @@ public class DataConverter {
             "\\b(01[016789]-\\d{3,4}-\\d{4})\\b|\\b(\\d{2,3}-\\d{3,4}-\\d{4})\\b";
 
     public static boolean containsPhoneNumber(String input) {
+    	if(input == null)
+    		return false;
         Pattern pattern = Pattern.compile(PHONE_NUMBER_PATTERN);
         Matcher matcher = pattern.matcher(input);
         return matcher.find();

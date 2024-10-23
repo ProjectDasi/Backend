@@ -26,6 +26,7 @@ public class WorkDetailDTO {
 	private String email;
 	private String details;
 	private String link;
+	private String preferredQualifications;
 	
 	
 	public static WorkDetailDTO convertToDTO(Work work) {
@@ -40,6 +41,7 @@ public class WorkDetailDTO {
 		String education = DataConverter.convertToOther(work.getEducation(), "무관");
 		String email = DataConverter.convertToOther(work.getEmail(), "-");
 		String contact = DataConverter.containsPhoneNumber(work.getContact()) ? work.getContact() : "-";
+		String preferredQualifications = DataConverter.convertToOther(work.getPreferredQualifications(), "-");
 		
 		WorkDetailDTO dto = WorkDetailDTO.builder()
 				.company(work.getCompany())
@@ -58,6 +60,7 @@ public class WorkDetailDTO {
 				.email(email)
 				.details(work.getDetails())
 				.link(work.getLink())
+				.preferredQualifications(preferredQualifications)
 				.build();
 		
 		return dto;

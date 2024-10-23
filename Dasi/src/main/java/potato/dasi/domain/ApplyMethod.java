@@ -1,5 +1,7 @@
 package potato.dasi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,6 +32,7 @@ public class ApplyMethod {
 	@ManyToOne
 	@JoinColumn(name = "program_id")
 	@ToString.Exclude
+	@JsonIgnore
 	private LearningProgram program;
 	
 	@Enumerated(EnumType.STRING)

@@ -61,9 +61,36 @@ public class WorkController {
 	public ResponseEntity<?> searchWorkList(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false, defaultValue = "전체") String region,
-            @RequestParam(required = false) String keyword){
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = true, defaultValue = "false") boolean qualification){
 		Pageable pageable = PageRequest.of(page, size);
-        Page<WorkListDTO> workList = workService.searchWorkList(pageable, region, keyword);
+        Page<WorkListDTO> workList = workService.searchWorkList(pageable, region, keyword, qualification);
+		
+        if(workList.isEmpty())
+			return ResponseEntity.badRequest().body("일자리 목록이 없습니다.");
+		else
+			return ResponseEntity.ok(workList);	
+	}
+	
+//	@GetMapping("/work/search")
+//	public ResponseEntity<?> searchWorkList(@RequestParam(defaultValue = "0") int page,
+//			@RequestParam(defaultValue = "10") int size,
+//			@RequestParam(required = false, defaultValue = "전체") String region,
+//			@RequestParam(required = false) String keyword){
+//		Pageable pageable = PageRequest.of(page, size);
+//		Page<WorkListDTO> workList = workService.searchWorkList(pageable, region, keyword);
+//		
+//		if(workList.isEmpty())
+//			return ResponseEntity.badRequest().body("일자리 목록이 없습니다.");
+//		else
+//			return ResponseEntity.ok(workList);	
+//	}
+	
+	@GetMapping("/work/qualification")
+	public ResponseEntity<?> searchQualificationWorkList(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+		Pageable pageable = PageRequest.of(page, size);
+        Page<WorkListDTO> workList = workService.searchQualificationWorkList(pageable);
 		
         if(workList.isEmpty())
 			return ResponseEntity.badRequest().body("일자리 목록이 없습니다.");

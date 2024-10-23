@@ -58,12 +58,39 @@ public class LearningProgramController {
 	}
 	
 	@GetMapping("/learning/search")
-	public ResponseEntity<?> searchWorkList(@RequestParam(defaultValue = "0") int page,
+	public ResponseEntity<?> searchLearningkList(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false, defaultValue = "전체") String region,
-            @RequestParam(required = false) String keyword){
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = true, defaultValue = "false") boolean popularity){
 		Pageable pageable = PageRequest.of(page, size);
-        Page<LearningListDTO> learningList = learningProgramService.searchLearningList(pageable, region, keyword);
+        Page<LearningListDTO> learningList = learningProgramService.searchLearningList(pageable, region, keyword, popularity);
+		
+        if(learningList.isEmpty())
+			return ResponseEntity.badRequest().body("교육 목록이 없습니다.");
+		else
+			return ResponseEntity.ok(learningList);	
+	}
+	
+//	@GetMapping("/learning/search")
+//	public ResponseEntity<?> searchLearningkList(@RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size,
+//            @RequestParam(required = false, defaultValue = "전체") String region,
+//            @RequestParam(required = false) String keyword){
+//		Pageable pageable = PageRequest.of(page, size);
+//        Page<LearningListDTO> learningList = learningProgramService.searchLearningList(pageable, region, keyword);
+//		
+//        if(learningList.isEmpty())
+//			return ResponseEntity.badRequest().body("교육 목록이 없습니다.");
+//		else
+//			return ResponseEntity.ok(learningList);	
+//	}
+	
+	@GetMapping("/learning/popularity")
+	public ResponseEntity<?> searchPopularLearningList(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+		Pageable pageable = PageRequest.of(page, size);
+        Page<LearningListDTO> learningList = learningProgramService.searchPopularLearningList(pageable);
 		
         if(learningList.isEmpty())
 			return ResponseEntity.badRequest().body("교육 목록이 없습니다.");

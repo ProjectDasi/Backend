@@ -61,32 +61,23 @@ public class LearningProgramService {
 		return learningDetail;
 	}
 
-//	public Page<LearningListDTO> searchLearningList(Pageable pageable, String keyword) {
+//	public Page<LearningListDTO> searchLearningList(Pageable pageable, String subRegion, String keyword) {
+//		Region region = regionRepository.findBySubregion(subRegion).orElse(null);
+//		Long regionId = null;
+//		String teachingMethod = null;
+//		
+//		if(region == null || region.getId().equals(1L))
+//			regionId = null;
+//		else
+//			regionId = region.getId();
+//		
 //		Pageable sortedByCreatedDateDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
 //				Sort.by("id").descending());
-//		Page<LearningProgram> learningListPage = learningProgramRepository.searchLearningPrograms(keyword,
+//		Page<LearningProgram> learningListPage = learningProgramRepository.searchLearningPrograms(regionId, keyword,
 //				sortedByCreatedDateDesc);
 //
 //		return learningListPage.map(learning -> LearningListDTO.convertToDTO(learning));
 //	}
-	
-	public Page<LearningListDTO> searchLearningList(Pageable pageable, String subRegion, String keyword) {
-		Region region = regionRepository.findBySubregion(subRegion).orElse(null);
-		Long regionId = null;
-		String teachingMethod = null;
-		
-		if(region == null || region.getId().equals(1L))
-			regionId = null;
-		else
-			regionId = region.getId();
-		
-		Pageable sortedByCreatedDateDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-				Sort.by("id").descending());
-		Page<LearningProgram> learningListPage = learningProgramRepository.searchLearningPrograms(regionId, keyword,
-				sortedByCreatedDateDesc);
-
-		return learningListPage.map(learning -> LearningListDTO.convertToDTO(learning));
-	}
 
 	public List<LearningRecommendDTO> getRecommend(String id) throws Exception {
 		Member member = memberRepository.findById(Long.parseLong(id)).orElse(null);
@@ -113,8 +104,8 @@ public class LearningProgramService {
 		HttpEntity<String> requestEntity = new HttpEntity<>(jsonPayload, headers);
 
 		// POST 요청 보내기
-		ResponseEntity<String> response = restTemplate.exchange("http://172.21.25.60:5000/get_education_id", HttpMethod.POST,
-				requestEntity, String.class);
+		ResponseEntity<String> response = restTemplate.exchange("http://172.21.25.60:5000/get_education_id",
+				HttpMethod.POST, requestEntity, String.class);
 
 		// 응답확인
 		String res = response.getBody();
@@ -128,6 +119,41 @@ public class LearningProgramService {
 		});
 		List<LearningProgram> recoLearningList = learningProgramRepository.findAllById(learningIds);
 
-		return recoLearningList.stream().map(learning -> LearningRecommendDTO.convertToDTO(learning)).collect(Collectors.toList());
+		return recoLearningList.stream().map(learning -> LearningRecommendDTO.convertToDTO(learning))
+				.collect(Collectors.toList());
+	}
+
+	public Page<LearningListDTO> searchPopularLearningList(Pageable pageable) {
+		Pageable sortedByViewsDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+				Sort.by("views").descending());
+		Page<LearningProgram> learningListPage = learningProgramRepository.findAll(sortedByViewsDesc);
+
+		return learningListPage.map(learning -> LearningListDTO.convertToDTO(learning));
+	}
+
+	public Page<LearningListDTO> searchLearningList(Pageable pageable, String subRegion, String keyword, boolean popularity) 
+	{
+		Region region = regionRepository.findBySubregion(subRegion).orElse(null);
+		Long regionId = null;
+		String teachingMethod = null;
+		
+		if(region == null || region.getId().equals(1L))
+			regionId = null;
+		else
+			regionId = region.getId();
+		
+		Pageable sortedByDesc = null;
+		System.out.println(popularity);
+		
+		if(popularity)
+			sortedByDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+					Sort.by("views").descending());
+		else
+			sortedByDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+				Sort.by("id").descending());
+		Page<LearningProgram> learningListPage = learningProgramRepository.searchLearningPrograms(regionId, keyword,
+				sortedByDesc);
+
+		return learningListPage.map(learning -> LearningListDTO.convertToDTO(learning));
 	}
 }
