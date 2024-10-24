@@ -44,6 +44,8 @@ public class MemberService {
 				.loginId(signUpInfo.getLoginId())
 				.password(passwordEncoder.encode(signUpInfo.getPassword()))
 				.birth(signUpInfo.getBirth())
+				.computerAbility(signUpInfo.getComputerAbility())
+				.workAbility(signUpInfo.isWorkAbility())
 				.build();
 		
 		// 새로운 회원 저장

@@ -42,8 +42,10 @@ public class LearningProgramController {
 		
 		if(learningDetail == null)
 			return ResponseEntity.badRequest().body("존재하지 않는 아이디 입니다.");
-		else
+		else {
+			learningProgramService.updateLearningViews(id);
 			return ResponseEntity.ok(learningDetail);		
+		}
 			
 	}
 	

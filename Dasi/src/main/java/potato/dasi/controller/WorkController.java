@@ -43,8 +43,11 @@ public class WorkController {
 		
 		if(workDetail == null)
 			return ResponseEntity.badRequest().body("존재하지 않는 아이디 입니다.");
-		else
+		else {
+			workService.updateWorkView(id);
 			return ResponseEntity.ok(workDetail);		
+			
+		}
 	}
 	
 	@GetMapping("/work/recommend")

@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import potato.dasi.domain.LearningProgram;
 import potato.dasi.domain.Member;
 import potato.dasi.domain.Region;
+import potato.dasi.domain.Work;
 import potato.dasi.dto.LearningDetailDTO;
 import potato.dasi.dto.LearningListDTO;
 import potato.dasi.dto.LearningRecommendDTO;
@@ -42,10 +43,12 @@ public class LearningProgramService {
 	private final RestTemplate restTemplate;
 
 	public Page<LearningListDTO> getLearningListPaging(Pageable pageable) {
-		Pageable sortByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-				Sort.by("id").descending());
+//		Pageable sortByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+//				Sort.by("id").descending());
+		Pageable sortByApplicationStartDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
+				Sort.by("applicationStart").descending());
 
-		Page<LearningProgram> learningListPage = learningProgramRepository.findAll(sortByIdDesc);
+		Page<LearningProgram> learningListPage = learningProgramRepository.findAll(sortByApplicationStartDesc);
 
 		return learningListPage.map(learning -> LearningListDTO.convertToDTO(learning));
 	}
@@ -150,10 +153,27 @@ public class LearningProgramService {
 					Sort.by("views").descending());
 		else
 			sortedByDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
-				Sort.by("id").descending());
+				Sort.by("applicationStart").descending());
 		Page<LearningProgram> learningListPage = learningProgramRepository.searchLearningPrograms(regionId, keyword,
 				sortedByDesc);
 
 		return learningListPage.map(learning -> LearningListDTO.convertToDTO(learning));
+	}
+
+	public void updateLearningViews(String id) {
+		Optional<LearningProgram> learningOptional = learningProgramRepository.findById(Long.parseLong(id));
+
+		if (learningOptional.isPresent()) {
+	        LearningProgram learning = learningOptional.get();
+	        learning.setViews(learning.getViews() + 1);
+	        learningProgramRepository.save(learning);
+	    }
+//		if (!learning.isEmpty()) {
+//			Long views = learning.get().getViews();
+//			views += 1;
+//			
+//			learning.get().setViews(views);
+//			learningProgramRepository.save(learning.get());
+//		}		
 	}
 }

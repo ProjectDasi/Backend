@@ -19,4 +19,6 @@ public class SignUpDTO {
 	private String password;
 	private Date birth;
 	private String[] preferenceId;
+	private Long computerAbility;
+	private boolean workAbility;
 }
