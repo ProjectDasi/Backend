@@ -1,11 +1,15 @@
 package potato.dasi.persistence;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import potato.dasi.domain.LearningProgram;
 import potato.dasi.domain.Work;
 
 public interface WorkRepository extends JpaRepository<Work, Long> {

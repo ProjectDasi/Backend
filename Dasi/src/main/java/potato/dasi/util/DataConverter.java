@@ -10,13 +10,13 @@ public class DataConverter {
     	if(date == null)
     		return null;
     	
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd");
         String dateString = dateFormat.format(date);
 
         switch (dateString) {
-            case "2999-12-31":
+            case "2999.12.31":
                 return "상시채용";
-            case "9999-01-01":
+            case "9999.01.01":
                 return "채용시까지";
             default:
                 return dateString; // 시간이 없는 날짜 문자열로 반환
@@ -28,7 +28,7 @@ public class DataConverter {
             return null; // 빈 문자열이나 null인 경우 null 반환
         }
     	
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // 날짜 형식 지정
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd"); // 날짜 형식 지정
         try {
             // 문자열을 Date로 변환
             return formatter.parse(dateString);

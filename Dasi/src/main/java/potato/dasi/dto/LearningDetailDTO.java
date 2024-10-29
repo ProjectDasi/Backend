@@ -24,6 +24,7 @@ public class LearningDetailDTO {
 	private String details;
 	private String link;
 	private String viewDetailsLink;
+	private Long views;
 	
 	public static LearningDetailDTO convertToDTO(LearningProgram learningProgram) {
 	    StringBuilder apply = new StringBuilder();
@@ -53,6 +54,7 @@ public class LearningDetailDTO {
 				.details(learningProgram.getDetails())
 				.link(learningProgram.getLink())
 				.viewDetailsLink(learningProgram.getViewDetailsLink())
+				.views(learningProgram.getViews())
 				.build();
 		
 		return dto;

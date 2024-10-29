@@ -18,7 +18,7 @@ public class VerifyService {
 	private final CodeStorageService codeStorage;
 
 	public boolean sendVerificationCode(VerificationRequest request) {
-		System.out.println("Id:" + request);
+		System.out.println("Id:" + request.getLoginId());
 		Optional<Member> user = memberRepository.findByLoginId(request.getLoginId());
 		System.out.println(user.get());
 		if (user.isPresent()) {

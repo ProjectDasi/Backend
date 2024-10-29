@@ -1,22 +1,21 @@
 package potato.dasi.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import potato.dasi.domain.WorkLikes;
 import potato.dasi.domain.LearningLikes;
 import potato.dasi.domain.LearningProgram;
 import potato.dasi.domain.Member;
 import potato.dasi.domain.Work;
+import potato.dasi.domain.WorkLikes;
 import potato.dasi.dto.DeleteReqDTO;
 import potato.dasi.dto.LikeRequest;
-import potato.dasi.persistence.WorkLikesRepository;
 import potato.dasi.persistence.LearningLikesRepository;
 import potato.dasi.persistence.LearningProgramRepository;
 import potato.dasi.persistence.MemberRepository;
+import potato.dasi.persistence.WorkLikesRepository;
 import potato.dasi.persistence.WorkRepository;
 
 @Service
@@ -29,6 +28,10 @@ public class LikeService {
 	private final LearningLikesRepository learningLikesRepository;
 
 	public boolean addWorkLike(LikeRequest req) {
+		boolean isExisted = workLikesRepository.existsByMemberIdAndWorkId(req.getMemberId(), req.getLikeItemId());
+		if(isExisted)
+			return false;
+		
 		Member member = memberRepository.findById(req.getMemberId()).orElse(null);
 		if (member == null)
 			return false;
@@ -45,6 +48,10 @@ public class LikeService {
 	}
 
 	public boolean addLearningLike(LikeRequest req) {
+		boolean isExisted = learningLikesRepository.existsByMemberIdAndLearningProgramId(req.getMemberId(), req.getLikeItemId());
+		if(isExisted)
+			return false;
+		
 		Member member = memberRepository.findById(req.getMemberId()).orElse(null);
 		if (member == null)
 			return false;
@@ -139,6 +146,16 @@ public class LikeService {
 
 		learningLikesRepository.delete(learningLike);
 		return true;
+	}
+
+	public boolean getLikesExited(Long id) {
+		boolean isWorkExisted = workLikesRepository.existsByMemberId(id);
+		boolean isLearningExisted = learningLikesRepository.existsByMemberId(id);
+	
+		if(isWorkExisted && isLearningExisted)
+			return true;
+		else
+			return false;
 	}
 
 }

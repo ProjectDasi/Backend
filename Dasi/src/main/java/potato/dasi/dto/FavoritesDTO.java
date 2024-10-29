@@ -1,5 +1,7 @@
 package potato.dasi.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonalEduRecommendDTO {
-	private int id;
-	private double similarity;
-	private LearningDetailDTO detail;
+public class FavoritesDTO {
+	private List<WorkFavoriteDTO> jobs;
+	private List<LearningFavoriteDTO> edu;
 }

@@ -1,7 +1,11 @@
 package potato.dasi.service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import potato.dasi.domain.Certification;
 import potato.dasi.domain.Education;
+import potato.dasi.domain.LearningLikes;
 import potato.dasi.domain.LearningProgram;
 import potato.dasi.domain.Member;
 import potato.dasi.domain.Preference;
@@ -24,20 +29,26 @@ import potato.dasi.domain.Resume;
 import potato.dasi.domain.Training;
 import potato.dasi.domain.Work;
 import potato.dasi.domain.WorkExperience;
+import potato.dasi.domain.WorkLikes;
+import potato.dasi.dto.FavoritesDTO;
 import potato.dasi.dto.LearningDetailDTO;
+import potato.dasi.dto.LearningFavoriteDTO;
 import potato.dasi.dto.PersonalEduRecommendDTO;
 import potato.dasi.dto.PersonalJobRecommendDTO;
 import potato.dasi.dto.PersonalRecommendDTO;
 import potato.dasi.dto.PersonalRecommendReqDTO;
 import potato.dasi.dto.WorkDetailDTO;
+import potato.dasi.dto.WorkFavoriteDTO;
 import potato.dasi.persistence.CertificationRepository;
 import potato.dasi.persistence.EducationRepository;
+import potato.dasi.persistence.LearningLikesRepository;
 import potato.dasi.persistence.LearningProgramRepository;
 import potato.dasi.persistence.MemberRepository;
 import potato.dasi.persistence.PreferenceRepository;
 import potato.dasi.persistence.ResumeRepository;
 import potato.dasi.persistence.TrainingRepository;
 import potato.dasi.persistence.WorkExperienceRepository;
+import potato.dasi.persistence.WorkLikesRepository;
 import potato.dasi.persistence.WorkRepository;
 
 @Service
@@ -53,6 +64,10 @@ public class RecommendService {
 	private final PreferenceRepository preferenceRepository;
 	private final LearningProgramRepository learningProgramRepository;
 	private final WorkRepository workRepository;
+	private final WorkLikesRepository workLikesRepository;
+	private final LearningLikesRepository learningLikesRepository;
+	
+	
 	private final ObjectMapper objectMapper;
 	private final RestTemplate restTemplate;
 
@@ -61,8 +76,10 @@ public class RecommendService {
 
 		Resume resume = resumeRepository.findByMemberId(memId).orElse(null);
 		Member member = memberRepository.findById(memId).orElse(null);
+		boolean workLikeIsExited = workLikesRepository.existsByMemberId(memId);
+		boolean learningLikeIsExited = learningLikesRepository.existsByMemberId(memId);
 
-		if (resume == null || member == null)
+		if (resume == null || member == null || !workLikeIsExited || !learningLikeIsExited)
 			return null;
 
 		// WorkExperience 관련 문자열
@@ -123,10 +140,41 @@ public class RecommendService {
 			preferStr.append(preferList.get(0).getPreferenceType().getType());
 			
 		}
+		
+		List<WorkLikes> workLikes = workLikesRepository.findByMemberId(member.getId(), PageRequest.of(0, 2, Sort.by("savedTime").descending()));
+		List<LearningLikes> learningLikes = learningLikesRepository.findByMemberId(member.getId(), PageRequest.of(0, 2, Sort.by("savedTime").descending()));
+		List<WorkFavoriteDTO> workFavoriteDTOs = new ArrayList<>();
+		List<LearningFavoriteDTO> learningFavoriteDTOs = new ArrayList<>();
+		
+		if(!workLikes.isEmpty()) {
+			for(WorkLikes like: workLikes) {
+				WorkFavoriteDTO workDTO = WorkFavoriteDTO.convertToDTO(like.getWork());
+				workFavoriteDTOs.add(workDTO);
+			}
+		}
+		
+		if(!learningLikes.isEmpty()) {
+			for(LearningLikes like: learningLikes) {
+				LearningFavoriteDTO learningDTO = LearningFavoriteDTO.convertToDTO(like.getLearningProgram());
+				learningFavoriteDTOs.add(learningDTO);
+			}
+		}
+		
+		FavoritesDTO favorites = FavoritesDTO.builder()
+				.edu(learningFavoriteDTOs)
+				.jobs(workFavoriteDTOs)
+				.build();
 
-		PersonalRecommendReqDTO req = PersonalRecommendReqDTO.builder().address(resume.getAddress())
-				.workDescription(workExpStr.toString()).certificationName(certStr.toString())
-				.trainingName(trainStr.toString()).major(eduStr.toString()).preferenceType(preferStr.toString())
+		PersonalRecommendReqDTO req = PersonalRecommendReqDTO.builder()
+				.regionId(member.getRegion().getId())
+				.workDescription(workExpStr.toString())
+				.certificationName(certStr.toString())
+				.trainingName(trainStr.toString())
+				.major(eduStr.toString())
+				.preferenceType(preferStr.toString())
+				.isDisabled(member.isWorkAbility())
+				.computerSkillLevel(member.getComputerAbility())
+				.favorites(favorites)
 				.build();
 
 		System.out.println(req);
@@ -143,8 +191,11 @@ public class RecommendService {
 		HttpEntity<String> requestEntity = new HttpEntity<>(jsonPayload, headers);
 
 		// POST 요청 보내기
-		ResponseEntity<String> response = restTemplate.exchange("http://172.21.25.60:5000/recommend", HttpMethod.POST,
+		ResponseEntity<String> response = restTemplate.exchange("http://172.21.40.4:5000/recommend", HttpMethod.POST,
 				requestEntity, String.class);
+//		// POST 요청 보내기
+//		ResponseEntity<String> response = restTemplate.exchange("http://172.21.25.60:5000/recommend", HttpMethod.POST,
+//				requestEntity, String.class);
 
 		// 응답확인
 		String res = response.getBody();
@@ -164,11 +215,20 @@ public class RecommendService {
 			edu.setDetail(dto);
 		}
 		
+		// view 필드를 기준으로 recommendEduList 내림차순 정렬
+//		recommendEduList.sort(Comparator.comparing((PersonalEduRecommendDTO edu) -> edu.getDetail().getViews()).reversed());
+		recommendEduList.sort(Comparator.comparing((PersonalEduRecommendDTO edu) -> edu.getSimilarity()).reversed());
+
+		
 		for(PersonalJobRecommendDTO job : recommendJobList) {
 			Work work = workRepository.findById((long) job.getId()).orElse(null);
 			WorkDetailDTO dto = WorkDetailDTO.convertToDTO(work);
 			job.setDetail(dto);
 		}
+		
+		// view 필드를 기준으로 recommendJobList 내림차순 정렬
+		recommendJobList.sort(Comparator.comparing((PersonalJobRecommendDTO job) -> job.getSimilarity()).reversed());
+
 		// PersonalRecommendDTO 객체 생성
 		PersonalRecommendDTO personalRecommendDTO = PersonalRecommendDTO.builder()
 											    .educationRecommend(recommendEduList)  // 교육 추천 리스트 할당
@@ -176,6 +236,7 @@ public class RecommendService {
 											    .build();
 
 		return personalRecommendDTO;
+//		return null;
 	}
 
 }

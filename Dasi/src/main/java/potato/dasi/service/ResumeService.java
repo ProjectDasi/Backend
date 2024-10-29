@@ -70,10 +70,18 @@ public class ResumeService {
 		// 파일 이름 및 크기 로그 출력
 		System.out.println("수신한 파일 이름: " + file.getOriginalFilename());
 		System.out.println("수신한 파일 크기: " + file.getSize() + " bytes");
+		
+		Member member = memberRepository.findById(id).orElse(null);
+		if(member == null)
+			return null;
+		
+		Resume oldResume = resumeRepository.findByMemberId(id).orElse(null);
+		if(oldResume != null)
+			resumeRepository.delete(oldResume);
 
 		// Flask 서버 URL 설정
-//		String flaskUrl = "http://172.21.7.46:5000/upload";
-        String flaskUrl = "http://localhost:5000/upload-file";
+		String flaskUrl = "http://172.21.42.253:5000/upload";
+//        String flaskUrl = "http://localhost:5000/upload-file";
 
 		// HTTP 요청 헤더 및 바디 준비
 		HttpHeaders headers = new HttpHeaders();
@@ -102,7 +110,7 @@ public class ResumeService {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode root = objectMapper.readTree(res);
 		JsonNode itemsNodeResume = root.path("data").path("resume");
-		JsonNode itemsNodeWorkExp = root.path("data").path("work_experience");
+		JsonNode itemsNodeWorkExp = root.path("data").path("workExperience");
 		JsonNode itemsNodeCertification = root.path("data").path("certification");
 		JsonNode itemsNodeTraining = root.path("data").path("training");
 		JsonNode itemsNodeEducation = root.path("data").path("education");
@@ -123,9 +131,7 @@ public class ResumeService {
 				new TypeReference<List<Education>>() {
 		});
 
-		Member member = memberRepository.findById(id).orElse(null);
-		if(member == null)
-			return null;
+		
 		
 		resume.setMember(member);
 		
@@ -176,6 +182,16 @@ public class ResumeService {
 		try (FileInputStream fis = new FileInputStream(file)) {
 			return DigestUtils.md5DigestAsHex(fis);
 		}
+	}
+	
+
+	public ResumeReqDTO getResume(Long id) {
+		Resume resume = resumeRepository.findByMemberId(id).orElse(null);
+		
+		if(resume == null)
+			return null;
+		
+		return ResumeReqDTO.convertToDTO(resume);
 	}
 
 	public ResumeReqDTO updateResume(Long id, ResumeReqDTO resumeDTO) {
@@ -384,5 +400,12 @@ public class ResumeService {
 
 	    return updatedList;
 	}
+
+	public boolean resumeIsExisted(Long id) {
+		boolean isExisted = resumeRepository.existsByMemberId(id);
+		
+		return isExisted;
+	}
+
 
 }

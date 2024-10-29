@@ -2,7 +2,8 @@ package potato.dasi.domain;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import potato.dasi.util.MultiDateDeserializer;
 
 @Getter
 @Setter
@@ -36,6 +38,7 @@ public class Certification {
 	private Resume resume;
 	
 	@Temporal(value = TemporalType.DATE)
+	@JsonDeserialize(using = MultiDateDeserializer.class)
 	private Date acquisitionDate;		// 취득 날짜
 
 //	@Column(nullable = false)

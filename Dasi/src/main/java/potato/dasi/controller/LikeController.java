@@ -30,7 +30,7 @@ public class LikeController {
 		if (result)
 			return ResponseEntity.ok("찜목록에 추가되었습니다.");
 		else
-			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+			return ResponseEntity.badRequest().body("이미 존재하거나 존재하지 않아 추가할 수 없습니다.");
 	}
 
 	@PostMapping("/like/learning/add")
@@ -40,7 +40,7 @@ public class LikeController {
 		if (result)
 			return ResponseEntity.ok("찜목록에 추가되었습니다.");
 		else
-			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+			return ResponseEntity.badRequest().body("이미 존재하거나 존재하지 않아 추가할 수 없습니다.");
 	}
 
 	@GetMapping("/like/work/{id}/{itemId}")
@@ -53,6 +53,13 @@ public class LikeController {
 	@GetMapping("/like/learning/{id}/{itemId}")
 	public ResponseEntity<?> getLearningLikeExisted(@PathVariable Long id, @PathVariable Long itemId) {
 		boolean result = likeService.getLearningLikeExisted(id, itemId);
+
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping("/like/{id}")
+	public ResponseEntity<?> getLikesExited(@PathVariable Long id) {
+		boolean result = likeService.getLikesExited(id);
 
 		return ResponseEntity.ok(result);
 	}

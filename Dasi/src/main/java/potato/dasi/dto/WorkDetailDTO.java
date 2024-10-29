@@ -27,6 +27,7 @@ public class WorkDetailDTO {
 	private String details;
 	private String link;
 	private String preferredQualifications;
+	private Long views;
 	
 	
 	public static WorkDetailDTO convertToDTO(Work work) {
@@ -61,6 +62,7 @@ public class WorkDetailDTO {
 				.details(work.getDetails())
 				.link(work.getLink())
 				.preferredQualifications(preferredQualifications)
+				.views(work.getViews())
 				.build();
 		
 		return dto;
