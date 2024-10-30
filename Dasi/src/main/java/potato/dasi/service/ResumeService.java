@@ -211,7 +211,6 @@ public class ResumeService {
 	    List<Training> updatedTrainingList = processTrainingList(resume, resumeDTO.getTraining());
 
 	    // 6. 업데이트된 리스트를 Resume에 설정
-	    resume.setPhoto(resumeDTO.getResume().getPhoto());
 	    resume.setName(resumeDTO.getResume().getName());
 	    resume.setAddress(resumeDTO.getResume().getAddress());
 	    resume.setPhone(resumeDTO.getResume().getPhone());

@@ -15,7 +15,6 @@ import potato.dasi.util.DataConverter;
 @NoArgsConstructor
 public class ResumeDTO {
 	private Long id;
-	private String photo;
 	private String name;	
 	private String address;
 	private String phone;	
@@ -36,7 +35,6 @@ public class ResumeDTO {
 		
 		ResumeDTO dto = ResumeDTO.builder()
 				.id(resume.getId())
-				.photo(resume.getPhoto())
 				.name(resume.getName())
 				.address(resume.getAddress())
 				.phone(resume.getPhone())

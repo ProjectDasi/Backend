@@ -47,7 +47,6 @@ public class Resume {
 	private Date updateDate;
 	
 	// @Column(nullable=false)처리?
-	private String photo;
 	private String name;	
 	private String address;
 	private String phone;	// 전화번호 형식 지정?
