@@ -8,10 +8,10 @@ Dasi Backend
 2024.08.01 ~ 2024.11.01
 
 ### 프로젝트 팀 구성 및 역할
-|백엔드|프런트엔드|데이터분석|데이터분석|
-|:---:|:---:|:---:|:---:|
-|이영인|김우정|배지현|신건영|
-|<a href="https://github.com/ProjectDasi/Backend" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>|<a href="https://github.com/ProjectDasi/FrontEnd" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>|<a href="https://github.com/ProjectDasi/EasyOCR_dasi" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>|<a href="https://github.com/ProjectDasi/Data_recommend" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>|
+|백엔드|프런트엔드|프런트엔드|데이터분석|데이터분석|
+|:---:|:---:|:---:|:---:|:---:|
+|이영인|김우정|채수철|배지현|신건영|
+|<a href="https://github.com/ProjectDasi/Backend" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>|<a href="https://github.com/ProjectDasi/FrontEnd" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>|<a href="https://github.com/ProjectDasi/FrontEnd" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>|<a href="https://github.com/ProjectDasi/EasyOCR_dasi" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>|<a href="https://github.com/ProjectDasi/Data_recommend" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"></a>|
 
 ### 사용한 기술
 <img width="1247" alt="KakaoTalk_20241101_010348992" src="https://github.com/user-attachments/assets/cd2b15eb-dada-4251-abc1-efcc226191b1">
