@@ -23,6 +23,18 @@ public class DataConverter {
         }
     }
     
+    public static String convertDateWithTime(Date date) {
+        if (date == null)
+            return null;
+
+        // 시간 포함한 포맷
+        SimpleDateFormat dateFormatWithTime = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+        // 시간을 포함하여 포맷
+        String dateStringWithTime = dateFormatWithTime.format(date);
+        
+        return dateStringWithTime;
+    }
+    
     public static Date convertStringToDate(String dateString) {
     	if (dateString == null || dateString.trim().isEmpty()) {
             return null; // 빈 문자열이나 null인 경우 null 반환

@@ -80,7 +80,7 @@ public class ResumeService {
 			resumeRepository.delete(oldResume);
 
 		// Flask 서버 URL 설정
-		String flaskUrl = "http://172.21.42.253:5000/upload";
+		String flaskUrl = "http://172.21.35.200:5000/upload";
 //        String flaskUrl = "http://localhost:5000/upload-file";
 
 		// HTTP 요청 헤더 및 바디 준비

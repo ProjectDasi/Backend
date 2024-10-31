@@ -1,21 +1,20 @@
 package potato.dasi.dto;
 
-import java.util.Date;
-
 import lombok.Builder;
 import lombok.Data;
 import potato.dasi.domain.ApplyMethod;
 import potato.dasi.domain.LearningProgram;
+import potato.dasi.util.DataConverter;
 
 @Data
 @Builder
 public class LearningDetailDTO {
 	private String organization;
 	private String title;
-	private Date applicationStart;
-	private Date applicationEnd;
-	private Date progressStart;
-	private Date progressEnd;
+	private String applicationStart;
+	private String applicationEnd;
+	private String progressStart;
+	private String progressEnd;
 	private String apply;
 	private String situation;
 	private String manager;
@@ -23,10 +22,18 @@ public class LearningDetailDTO {
 	private String email;
 	private String details;
 	private String link;
-	private String viewDetailsLink;
 	private Long views;
 	
 	public static LearningDetailDTO convertToDTO(LearningProgram learningProgram) {
+		String applicationStart = DataConverter.convertDateWithTime(learningProgram.getApplicationStart());
+		String applicationEnd = DataConverter.convertDateWithTime(learningProgram.getApplicationEnd());
+		String progressStart = DataConverter.convertDateWithTime(learningProgram.getProgressStart());
+		String progressEnd = DataConverter.convertDateWithTime(learningProgram.getApplicationEnd());
+		String situation = DataConverter.convertToOther(learningProgram.getSituation(), "-");
+		String manager = DataConverter.convertToOther(learningProgram.getManager(), "-");
+		String phone = DataConverter.convertToOther(learningProgram.getPhone(), "-");
+		String email = DataConverter.convertToOther(learningProgram.getEmail(), "-");
+		
 	    StringBuilder apply = new StringBuilder();
 	    int size = learningProgram.getApplyMethod().size();
 	    int count = 0;
@@ -42,18 +49,17 @@ public class LearningDetailDTO {
 		LearningDetailDTO dto = LearningDetailDTO.builder()
 				.organization(learningProgram.getOrganization())
 				.title(learningProgram.getTitle())
-				.applicationStart(learningProgram.getApplicationStart())
-				.applicationEnd(learningProgram.getApplicationEnd())
-				.progressStart(learningProgram.getProgressStart())
-				.progressEnd(learningProgram.getProgressEnd())
+				.applicationStart(applicationStart)
+				.applicationEnd(applicationEnd)
+				.progressStart(progressStart)
+				.progressEnd(progressEnd)
 				.apply(apply.toString())
-				.situation(learningProgram.getSituation())
-				.manager(learningProgram.getManager())
-				.phone(learningProgram.getPhone())
-				.email(learningProgram.getEmail())
+				.situation(situation)
+				.manager(manager)
+				.phone(phone)
+				.email(email)
 				.details(learningProgram.getDetails())
 				.link(learningProgram.getLink())
-				.viewDetailsLink(learningProgram.getViewDetailsLink())
 				.views(learningProgram.getViews())
 				.build();
 		

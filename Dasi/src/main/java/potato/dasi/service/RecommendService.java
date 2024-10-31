@@ -76,10 +76,10 @@ public class RecommendService {
 
 		Resume resume = resumeRepository.findByMemberId(memId).orElse(null);
 		Member member = memberRepository.findById(memId).orElse(null);
-		boolean workLikeIsExited = workLikesRepository.existsByMemberId(memId);
-		boolean learningLikeIsExited = learningLikesRepository.existsByMemberId(memId);
+//		boolean workLikeIsExited = workLikesRepository.existsByMemberId(memId);
+//		boolean learningLikeIsExited = learningLikesRepository.existsByMemberId(memId);
 
-		if (resume == null || member == null || !workLikeIsExited || !learningLikeIsExited)
+		if (resume == null || member == null)
 			return null;
 
 		// WorkExperience 관련 문자열
@@ -191,7 +191,7 @@ public class RecommendService {
 		HttpEntity<String> requestEntity = new HttpEntity<>(jsonPayload, headers);
 
 		// POST 요청 보내기
-		ResponseEntity<String> response = restTemplate.exchange("http://172.21.40.4:5000/recommend", HttpMethod.POST,
+		ResponseEntity<String> response = restTemplate.exchange("http://172.21.31.88:5000/recommend", HttpMethod.POST,
 				requestEntity, String.class);
 //		// POST 요청 보내기
 //		ResponseEntity<String> response = restTemplate.exchange("http://172.21.25.60:5000/recommend", HttpMethod.POST,

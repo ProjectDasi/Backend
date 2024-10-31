@@ -30,6 +30,8 @@ public class MemberController {
 	public ResponseEntity<?> signUp(@RequestBody SignUpDTO signUpInfo){
 		Member result = memberService.signUp(signUpInfo);
 		
+		System.out.println(signUpInfo);
+		
 		if(result == null)
 			return ResponseEntity.badRequest().body("잘못된 요청입니다.");
 		else
